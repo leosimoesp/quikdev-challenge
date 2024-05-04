@@ -1,11 +1,21 @@
-const AuthenticateUser = (userRepository) => {
+const AuthenticateUser = (userRepository, cypher) => {
   const execute = async (email, password) => {
     try {
       const user = await userRepository.findByEmail(email);
-      if (user && user.password === password) {
-        return true;
+
+      if (user) {
+        const isAuthenticated = await cypher.compare(password, user.password);
+
+        if (isAuthenticated) {
+          return {
+            authenticated: isAuthenticated,
+            userId: user.id,
+          };
+        }
       }
-      return false;
+      return {
+        authenticated: false,
+      };
     } catch (err) {
       console.error(err);
       throw err;

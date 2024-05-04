@@ -1,0 +1,10 @@
+#!/bin/bash
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -d "$POSTGRES_DB"  <<-EOSQL
+     CREATE EXTENSION "uuid-ossp";
+     CREATE SCHEMA "$POSTGRES_USER" AUTHORIZATION "$POSTGRES_USER";
+EOSQL
+
+
+
+

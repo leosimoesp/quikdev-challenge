@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 .env
+postgres/data/
+.vscode/
+postgres
