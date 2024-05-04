@@ -7,6 +7,7 @@ const AuthenticateUser = (userRepository, cypher) => {
         const isAuthenticated = await cypher.compare(password, user.password);
 
         if (isAuthenticated) {
+          await userRepository.createHistoryLogin(user.id);
           return {
             authenticated: isAuthenticated,
             userId: user.id,

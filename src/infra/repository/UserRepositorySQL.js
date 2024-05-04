@@ -59,9 +59,34 @@ const UserRepositorySQL = () => {
     }
   };
 
+  const createHistoryLogin = async (userId) => {
+    const dbPool = await getDBPool();
+    const client = await dbPool.connect();
+    const sql = {
+      name: 'create-history-login',
+      text: `INSERT INTO login_history(user_id) VALUES($1) RETURNING id;`,
+      values: [userId],
+    };
+    try {
+      const { rows } = await client.query(sql);
+      if (rows && rows.length > 0) {
+        return;
+      } else {
+        throw Error('Error create history login');
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
+    } finally {
+      client.release();
+      await dbPool.end();
+    }
+  };
+
   return {
     create,
     findByEmail,
+    createHistoryLogin,
   };
 };
 

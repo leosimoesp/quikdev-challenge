@@ -29,9 +29,12 @@ const UserRepositoryMemory = () => {
     return user;
   };
 
+  const createHistoryLogin = async (userId) => {};
+
   return {
     create,
     findByEmail,
+    createHistoryLogin,
   };
 };
 

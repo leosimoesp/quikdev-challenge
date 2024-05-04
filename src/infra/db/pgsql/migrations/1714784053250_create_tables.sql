@@ -8,3 +8,10 @@ CREATE TABLE IF NOT EXISTS "user" (
      PRIMARY KEY(id),
      UNIQUE(email)
 );
+
+CREATE TABLE IF NOT EXISTS login_history (
+     id uuid DEFAULT gen_random_uuid(),
+     user_id uuid NOT NULL,
+     last_login_at timestamp NOT NULL DEFAULT NOW(),
+     PRIMARY KEY(id)
+);
