@@ -1,86 +1,91 @@
 const {
   UserRepositoryMemory,
-} = require("../src/core/repository/UserRepositoryMemory");
-const AuthenticateUser = require("../src/core/usecase/AuthenticateUser");
+} = require('../src/infra/repository/UserRepositoryMemory');
+const BcryptCipher = require('../src/infra/security/BcryptCipher');
+const AuthenticateUser = require('../src/core/usecase/AuthenticateUser');
 
-test("Should authenticate an user", async function () {
+test('Should authenticate an user', async function () {
   const userRepositoryMemory = UserRepositoryMemory();
+  const bcryptCipher = BcryptCipher();
+
   const user = await userRepositoryMemory.create({
-    email: "user@email.com",
-    password: "123456",
-    name: "User",
+    id: '91d3dbaf-5845-4597-8a83-667463f201c2',
+    email: 'user@email.com',
+    password: await bcryptCipher.encrypt('123456'),
+    name: 'User',
   });
 
-  expect(user.email).toBe("user@email.com");
-  expect(user.password).toBe("123456");
-  expect(user.name).toBe("User");
+  expect(user.email).toBe('user@email.com');
+  expect(user.password).toBeDefined();
+  expect(user.name).toBe('User');
   expect(user.id).toBeDefined();
   expect(user.isValid()).toBe(true);
 
-  const authenticateUser = AuthenticateUser(userRepositoryMemory);
+  const authenticateUser = AuthenticateUser(userRepositoryMemory, bcryptCipher);
 
   try {
-    const isAuthenticated = await authenticateUser.execute(
-      "user@email.com",
-      "123456"
+    const { authenticated } = await authenticateUser.execute(
+      'user@email.com',
+      '123456'
     );
-    expect(isAuthenticated).toBe(true);
+    expect(authenticated).toBe(true);
   } catch (err) {
     expect(err).toBeUndefined();
   }
 });
 
-test("Should results error if password is not equal", async function () {
+test('Should results error if password is not equal', async function () {
   const userRepositoryMemory = UserRepositoryMemory();
   const user = await userRepositoryMemory.create({
-    email: "user@email.com",
-    password: "123456",
-    name: "User",
+    email: 'user@email.com',
+    password: '123456',
+    name: 'User',
   });
 
-  expect(user.email).toBe("user@email.com");
-  expect(user.password).toBe("123456");
-  expect(user.name).toBe("User");
+  expect(user.email).toBe('user@email.com');
+  expect(user.password).toBe('123456');
+  expect(user.name).toBe('User');
   expect(user.id).toBeDefined();
   expect(user.isValid()).toBe(true);
 
-  const authenticateUser = AuthenticateUser(userRepositoryMemory);
+  const bcryptCipher = BcryptCipher();
+  const authenticateUser = AuthenticateUser(userRepositoryMemory, bcryptCipher);
 
   try {
-    const isAuthenticated = await authenticateUser.execute(
-      "user@email.com",
-      "abscdff525"
+    const { authenticated } = await authenticateUser.execute(
+      'user@email.com',
+      'abscdff525'
     );
-    expect(isAuthenticated).toBe(false);
+    expect(authenticated).toBe(false);
   } catch (err) {
     expect(err).toBeUndefined();
   }
 });
 
-test("Should result invalid user error if password is invalid", async function () {
+test('Should result invalid user error if password is invalid', async function () {
   const userRepositoryMemory = UserRepositoryMemory();
 
   try {
     const user = await userRepositoryMemory.create({
-      email: "user@email.com",
-      password: "",
-      name: "User",
+      email: 'user@email.com',
+      password: '',
+      name: 'User',
     });
   } catch (err) {
-    expect(err.message).toBe("Invalid User");
+    expect(err.message).toBe('Invalid User');
   }
 });
 
-test("Should result invalid user error if e-mail is invalid", async function () {
+test('Should result invalid user error if e-mail is invalid', async function () {
   const userRepositoryMemory = UserRepositoryMemory();
 
   try {
     const user = await userRepositoryMemory.create({
-      email: "",
-      password: "123456",
-      name: "User",
+      email: '',
+      password: '123456',
+      name: 'User',
     });
   } catch (err) {
-    expect(err.message).toBe("Invalid User");
+    expect(err.message).toBe('Invalid User');
   }
 });

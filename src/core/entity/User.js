@@ -9,13 +9,9 @@ const User = ({ id, name, email, password }) => {
   _password = password;
   _id = id;
 
-  const comparePassword = (password) => {
-    return _password === password;
-  };
-
   const isValid = () => {
     if (!_id || !_name || !_email || !_password) {
-      throw Error("Invalid User");
+      throw Error('Invalid User');
     }
     return true;
   };
@@ -27,7 +23,6 @@ const User = ({ id, name, email, password }) => {
     email,
     password,
     isValid,
-    comparePassword,
   };
 };
 module.exports = User;

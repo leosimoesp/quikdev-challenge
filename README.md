@@ -7,6 +7,9 @@ yarn add --dev jest
 yarn add express
 yarn add cors
 yarn add dotenv
+yarn add body-parser
+yarn add bcrypt
+yarn add jsonwebtoken
 
 
 package.json 
@@ -19,4 +22,7 @@ package.json
   }
 
 yarn run test
+
+
+#running load data simulate
 
