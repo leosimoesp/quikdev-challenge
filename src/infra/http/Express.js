@@ -4,7 +4,8 @@ const ExpressAdapter = require('../../adapter/ExpressAdapter');
 const ExpressErrorAdapter = require('../../adapter/ExpressErrorAdaper');
 const Parameters = require('../config/Parameters');
 const AuthenticateController = require('../../controller/AuthenticateController');
-const UpdateUserProfileController = require('../../controller/UpdateUserProfileController');
+const UserController = require('../../controller/UserController');
+const PostController = require('../../controller/PostController');
 
 const bodyParser = require('body-parser');
 const dbmanager = require('../db/pgsql/manager/config');
@@ -19,10 +20,8 @@ app.use(ExpressErrorAdapter);
 const jwtSigner = JwtSigner();
 const envLoader = Parameters();
 const authController = AuthenticateController(jwtSigner, envLoader);
-const updateUserProfileController = UpdateUserProfileController(
-  jwtSigner,
-  envLoader
-);
+const userController = UserController();
+const postController = PostController();
 const expressAdapter = ExpressAdapter(jwtSigner, envLoader);
 
 app.post('/auth', (req, res) => {
@@ -31,18 +30,22 @@ app.post('/auth', (req, res) => {
 
 app.patch('/users', expressAdapter.validateTokenJWT, (req, res, next) => {
   try {
-    expressAdapter.create(
-      updateUserProfileController.updateProfile(req, res, next)
-    );
+    expressAdapter.create(userController.updateProfile(req, res, next));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post('/posts', expressAdapter.validateTokenJWT, (req, res, next) => {
+  try {
+    expressAdapter.create(postController.createPost(req, res, next));
   } catch (error) {
     next(error);
   }
 });
 
 const port = envLoader.getEnv('PORT');
-
 dbmanager.syncDB();
-
 app.use(ExpressErrorAdapter);
 
 app.listen(port, () => {

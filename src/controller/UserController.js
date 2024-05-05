@@ -2,7 +2,7 @@ const { UserRepositorySQL } = require('../infra/repository/UserRepositorySQL');
 const UpdateUserProfile = require('../core/usecase/UpdateUserProfile');
 const BcryptCipher = require('../infra/security/BcryptCipher');
 
-const UpdateUserProfileController = (jwtSigner, envLoader) => {
+const UserController = () => {
   const updateProfile = async (req, res, next) => {
     try {
       const cypher = BcryptCipher();
@@ -11,13 +11,7 @@ const UpdateUserProfileController = (jwtSigner, envLoader) => {
       const email = req.body.email;
       const name = req.body.name;
       const password = req.body.password;
-
-      const token = req.headers['authorization'];
-
-      const { user: userId } = await jwtSigner.verify(
-        token,
-        envLoader.getEnv('SECRET_KEY')
-      );
+      const { user: userId } = req.userInfo;
 
       const updatedUser = await updateUserProfile.execute(userId, {
         email,
@@ -26,7 +20,7 @@ const UpdateUserProfileController = (jwtSigner, envLoader) => {
       });
 
       if (updatedUser) {
-        res.status(201).json({ message: 'User updated successfully' });
+        res.status(200).json({ message: 'User updated successfully' });
       }
     } catch (err) {
       next(err);
@@ -38,4 +32,4 @@ const UpdateUserProfileController = (jwtSigner, envLoader) => {
   };
 };
 
-module.exports = UpdateUserProfileController;
+module.exports = UserController;

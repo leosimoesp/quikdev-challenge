@@ -5,6 +5,13 @@ class UserNotFoundError extends Error {
   }
 }
 
+class PostNotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'PostNotFoundError';
+  }
+}
+
 class InvalidUserError extends Error {
   constructor(message) {
     super(message);
@@ -12,7 +19,16 @@ class InvalidUserError extends Error {
   }
 }
 
+class InvalidPostError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'InvalidPostError';
+  }
+}
+
 module.exports = {
   UserNotFoundError,
   InvalidUserError,
+  PostNotFoundError,
+  InvalidPostError,
 };

@@ -13,11 +13,12 @@ const ExpressAdapter = (jwtSigner, envLoader) => {
       return;
     }
     try {
-      const isValid = await jwtSigner.verify(
+      const data = await jwtSigner.verify(
         token,
         envLoader.getEnv('SECRET_KEY')
       );
-      if (isValid) {
+      if (data) {
+        req.userInfo = data;
         next();
       } else {
         res.status(403).end();
