@@ -1,3 +1,5 @@
+const { InvalidUserError } = require('../error/Error');
+
 const User = ({ id, name, email, password }) => {
   let _name;
   let _email;
@@ -10,9 +12,20 @@ const User = ({ id, name, email, password }) => {
   _id = id;
 
   const isValid = () => {
-    if (!_id || !_name || !_email || !_password) {
-      throw Error('Invalid User');
+    if (!id) {
+      throw new InvalidUserError('Id can not be null');
     }
+    if (!name) {
+      throw new InvalidUserError('Name can not be null');
+    }
+    if (!email) {
+      throw new InvalidUserError('E-mail can not be null');
+    }
+    if (!password) {
+      throw new InvalidUserError('Password can not be null');
+    }
+
+    //@TODO add others validation. Sample email valid, password requirements, etc...
     return true;
   };
   isValid();

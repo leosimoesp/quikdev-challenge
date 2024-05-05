@@ -1,14 +1,17 @@
 const ExpressAdapter = (jwtSigner, envLoader) => {
   const create = (fn) => {
-    return async function (req, res) {
+    return async function (req, res, next) {
       const obj = await fn(req.params, req.body);
       res.json(obj);
     };
   };
 
   const validateTokenJWT = async (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader.replace('Bearer ', '');
+    const token = req.headers['authorization'];
+    if (!token) {
+      res.status(401).end();
+      return;
+    }
     try {
       const isValid = await jwtSigner.verify(
         token,

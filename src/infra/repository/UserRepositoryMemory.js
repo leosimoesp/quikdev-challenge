@@ -1,5 +1,6 @@
 const User = require('../../core/entity/User');
 const crypto = require('crypto');
+const { UserNotFoundError } = require('../../core/error/Error');
 
 const UserRepositoryMemory = () => {
   const users = [];
@@ -9,7 +10,12 @@ const UserRepositoryMemory = () => {
     try {
       const userExists = users.find((user) => user.email === email);
       if (userExists) {
-        throw new Error('User already exists');
+        return User({
+          id: userExists.id,
+          name,
+          email: userExists.email,
+          password,
+        });
       }
 
       const user = User({ id, name, email, password });
@@ -24,7 +30,7 @@ const UserRepositoryMemory = () => {
   const findByEmail = async (email) => {
     const user = users.find((user) => user.email === email);
     if (!user) {
-      throw new Error('User not found');
+      throw new UserNotFoundError('User not found');
     }
     return user;
   };

@@ -2,7 +2,7 @@ const AuthenticateUser = require('../core/usecase/AuthenticateUser');
 const { UserRepositorySQL } = require('../infra/repository/UserRepositorySQL');
 const BcryptCipher = require('../infra/security/BcryptCipher');
 
-const AuthenticateController = (jwtSigner, envLoader) => {
+const AuthenticateController = (jwtSigner, envLoader, cypher) => {
   const authenticate = async (req, res) => {
     try {
       const userRepositorySQL = UserRepositorySQL();

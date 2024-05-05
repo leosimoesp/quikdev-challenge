@@ -7,8 +7,12 @@ const JwtSigner = () => {
     });
   };
   const verify = async (token, secret) => {
+    let cleanedToken;
+    if (token) {
+      cleanedToken = token.replace('Bearer ', '');
+    }
     try {
-      const { exp, iat, ...data } = jwt.verify(token, secret);
+      const { exp, iat, ...data } = jwt.verify(cleanedToken, secret);
       return data;
     } catch (err) {
       console.log(err);
