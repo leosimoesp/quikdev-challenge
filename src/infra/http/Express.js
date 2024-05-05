@@ -44,6 +44,14 @@ app.post('/posts', expressAdapter.validateTokenJWT, (req, res, next) => {
   }
 });
 
+app.patch('/posts/:id', expressAdapter.validateTokenJWT, (req, res, next) => {
+  try {
+    expressAdapter.create(postController.updatePost(req, res, next));
+  } catch (error) {
+    next(error);
+  }
+});
+
 const port = envLoader.getEnv('PORT');
 dbmanager.syncDB();
 app.use(ExpressErrorAdapter);

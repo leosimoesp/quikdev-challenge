@@ -27,5 +27,16 @@ CREATE TABLE IF NOT EXISTS post (
      PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS post_history (
+     id uuid DEFAULT gen_random_uuid(),
+     post_id uuid NOT NULL,
+     user_id uuid NOT NULL,
+     title VARCHAR(100) NOT NULL,
+     description TEXT NOT NULL,
+     image VARCHAR(255),
+     created_at timestamp NOT NULL DEFAULT NOW(),
+     PRIMARY KEY(id)
+);
+
 
 
