@@ -1,4 +1,9 @@
-const { UserNotFoundError, InvalidUserError } = require('../core/error/Error');
+const {
+  UserNotFoundError,
+  InvalidUserError,
+  PostNotFoundError,
+  NotAuthorizedError,
+} = require('../core/error/Error');
 
 const ExpressErrorAdapter = (err, req, res, next) => {
   console.error(err.stack);
@@ -8,8 +13,16 @@ const ExpressErrorAdapter = (err, req, res, next) => {
       return res.status(404).json({
         error: err.message,
       });
+    case PostNotFoundError:
+      return res.status(404).json({
+        error: err.message,
+      });
     case InvalidUserError:
       return res.status(422).json({
+        error: err.message,
+      });
+    case NotAuthorizedError:
+      return res.status(403).json({
         error: err.message,
       });
     default:

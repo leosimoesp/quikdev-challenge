@@ -41,7 +41,7 @@ const PostRepositorySQL = () => {
     const client = await dbPool.connect();
     const sql = {
       name: 'find-post-by-id',
-      text: `SELECT p.id, p.title, p.description, p.image FROM post p WHERE p.id=$1;`,
+      text: `SELECT p.id, p.user_id, p.title, p.description, p.image FROM post p WHERE p.id=$1;`,
       values: [postId],
     };
     try {
@@ -49,6 +49,7 @@ const PostRepositorySQL = () => {
       if (rows && rows.length > 0) {
         return Post({
           id: rows[0].id,
+          userId: rows[0].user_id,
           title: rows[0].title,
           description: rows[0].description,
           image: rows[0].image,
@@ -64,9 +65,61 @@ const PostRepositorySQL = () => {
     }
   };
 
+  const updateWithHistory = async (oldPost, newPost) => {
+    const {
+      id,
+      userId,
+      title: oldTitle,
+      description: oldDesc,
+      image: oldImg,
+    } = oldPost;
+
+    const { title: newTitle, description: newDesc, image: newImg } = newPost;
+
+    const sqlInsert = {
+      name: 'insert-post-history',
+      text: `INSERT INTO post_history(post_id, user_id, title, description, image) VALUES ($1, $2, $3, $4, $5);`,
+      values: [id, userId, oldTitle, oldDesc, oldImg],
+    };
+    const sqlUpdate = {
+      name: 'update-post',
+      text: `UPDATE post p SET title=$2, description=$3, image=$4, updated_at=now()
+      WHERE p.id=$1
+      RETURNING id;`,
+      values: [id, newTitle, newDesc, newImg],
+    };
+
+    const dbPool = await getDBPool();
+    const client = await dbPool.connect();
+    try {
+      await client.query('BEGIN');
+      const { rows } = await client.query(sqlUpdate);
+      await client.query(sqlInsert);
+      if (rows && rows.length > 0) {
+        await client.query('COMMIT');
+        return Post({
+          id,
+          userId,
+          title: newTitle,
+          description: newDesc,
+          image: newImg,
+        });
+      }
+      return null;
+    } catch (err) {
+      console.error(err);
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+      await dbPool.end();
+    }
+  };
+
   return {
     create,
     findById,
+    updateWithHistory,
   };
 };
 

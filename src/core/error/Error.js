@@ -19,6 +19,13 @@ class InvalidUserError extends Error {
   }
 }
 
+class NotAuthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'NotAuthorizedError';
+  }
+}
+
 class InvalidPostError extends Error {
   constructor(message) {
     super(message);
@@ -31,4 +38,5 @@ module.exports = {
   InvalidUserError,
   PostNotFoundError,
   InvalidPostError,
+  NotAuthorizedError,
 };
