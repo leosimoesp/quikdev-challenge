@@ -72,7 +72,7 @@ test('Should result invalid user error if password is invalid', async function (
       name: 'User',
     });
   } catch (err) {
-    expect(err.message).toBe('Invalid User');
+    expect(err.message).toBe('Password can not be null');
   }
 });
 
@@ -86,6 +86,6 @@ test('Should result invalid user error if e-mail is invalid', async function () 
       name: 'User',
     });
   } catch (err) {
-    expect(err.message).toBe('Invalid User');
+    expect(err.message).toBe('E-mail can not be null');
   }
 });

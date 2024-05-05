@@ -1,5 +1,6 @@
 const User = require('../../core/entity/User');
 const { getDBPool } = require('../db/pgsql/manager/config');
+const { UserNotFoundError } = require('../../core/error/Error');
 
 const UserRepositorySQL = () => {
   const create = async ({ name, email, password }) => {
@@ -49,7 +50,7 @@ const UserRepositorySQL = () => {
           password: rows[0].password,
         });
       }
-      throw Error('User not found');
+      throw new UserNotFoundError('User not found');
     } catch (err) {
       console.error(err);
       throw err;
@@ -72,7 +73,7 @@ const UserRepositorySQL = () => {
       if (rows && rows.length > 0) {
         return;
       } else {
-        throw Error('Error create history login');
+        throw new Error('Error create history login');
       }
     } catch (err) {
       console.error(err);
