@@ -32,7 +32,6 @@ const UserRepositorySQL = () => {
   };
 
   const findByEmail = async (email) => {
-    console.log('findByEmail=> ', email);
     const emailLowerCase = email ? email.toLowerCase() : '';
     const dbPool = await getDBPool();
     const client = await dbPool.connect();

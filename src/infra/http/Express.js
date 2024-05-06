@@ -8,6 +8,16 @@ const UserController = require('../../controller/UserController');
 const PostController = require('../../controller/PostController');
 
 const bodyParser = require('body-parser');
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '/tmp');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage, dest: '/' });
 const dbmanager = require('../db/pgsql/manager/config');
 const JwtSigner = require('../security/JwtSigner');
 
@@ -36,21 +46,31 @@ app.patch('/users', expressAdapter.validateTokenJWT, (req, res, next) => {
   }
 });
 
-app.post('/posts', expressAdapter.validateTokenJWT, (req, res, next) => {
-  try {
-    expressAdapter.create(postController.createPost(req, res, next));
-  } catch (error) {
-    next(error);
+app.post(
+  '/posts',
+  expressAdapter.validateTokenJWT,
+  upload.single('image'),
+  (req, res, next) => {
+    try {
+      expressAdapter.create(postController.createPost(req, res, next));
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-app.patch('/posts/:id', expressAdapter.validateTokenJWT, (req, res, next) => {
-  try {
-    expressAdapter.create(postController.updatePost(req, res, next));
-  } catch (error) {
-    next(error);
+app.patch(
+  '/posts/:id',
+  expressAdapter.validateTokenJWT,
+  upload.single('image'),
+  (req, res, next) => {
+    try {
+      expressAdapter.create(postController.updatePost(req, res, next));
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 app.post('/posts/all', expressAdapter.validateTokenJWT, (req, res, next) => {
   try {

@@ -1,6 +1,6 @@
 const { PostNotFoundError, NotAuthorizedError } = require('../error/Error');
-const UpdatePost = (postRepository) => {
-  const execute = async (requesterId, postInfo) => {
+const UpdatePost = (postRepository, fileUploadProvider) => {
+  const execute = async (requesterId, postInfo, file) => {
     try {
       const { id, title, description, image } = postInfo;
 
@@ -13,7 +13,10 @@ const UpdatePost = (postRepository) => {
         const newPost = { id, userId: post.userId };
         newPost.title = title ? title : post.title;
         newPost.description = description ? description : post.description;
-        newPost.image = image ? image : post.image;
+        if (file) {
+          const { url } = await fileUploadProvider.uploadFile(file);
+          newPost.image = url;
+        }
         return await postRepository.updateWithHistory(post, newPost);
       }
 

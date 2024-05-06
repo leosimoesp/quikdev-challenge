@@ -3,6 +3,7 @@ const CreatePost = require('../core/usecase/CreatePost');
 const UpdatePost = require('../core/usecase/UpdatePost');
 const GetAllPosts = require('../core/usecase/GetAllPosts');
 const GetPost = require('../core/usecase/GetPost');
+const { FileUploadProvider } = require('../infra/provider/FileUploadProvider');
 
 const PostController = () => {
   const createPost = async (req, res, next) => {
@@ -29,19 +30,27 @@ const PostController = () => {
   const updatePost = async (req, res, next) => {
     try {
       const postRepositorySQL = PostRepositorySQL();
-      const updatePost = UpdatePost(postRepositorySQL);
-      const title = req.body.title;
-      const description = req.body.description;
-      const image = req.body.image;
+      const fileUploadProvider = FileUploadProvider();
+      const updatePost = UpdatePost(postRepositorySQL, fileUploadProvider);
+      console.log(req.file, req.body.data);
+
+      const dataRaw = JSON.parse(req.body.data);
+      const file = req.file;
+      const title = dataRaw.title;
+      const description = dataRaw.description;
+
       const { user: userId } = req.userInfo;
       const id = req.params.id;
 
-      const post = await updatePost.execute(userId, {
-        id,
-        title,
-        description,
-        image,
-      });
+      const post = await updatePost.execute(
+        userId,
+        {
+          id,
+          title,
+          description,
+        },
+        file
+      );
       if (post) {
         res.status(200).json({ message: 'Post updated' });
       }
