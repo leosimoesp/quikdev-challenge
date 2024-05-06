@@ -1,0 +1,201 @@
+{
+	"info": {
+		"_postman_id": "e8749b3c-b33d-4772-9c28-a868c1fb7f67",
+		"name": "api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1143489"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"leo@example.com\",\n    \"password\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNmJiMzlhMGUtMjYwMS00MmJhLWEzZmUtZGE0NjQxN2M3ZWM3IiwiaWF0IjoxNzE0OTQ1NjY5LCJleHAiOjE3MTQ5NDkyNjl9.928xrszpCaV46Wx2genWoUOZB-IbeO-EU3PKgLvxIyY"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"title\":\"Hello World\",\"description\":\"A Hello World Post\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNmJiMzlhMGUtMjYwMS00MmJhLWEzZmUtZGE0NjQxN2M3ZWM3IiwiaWF0IjoxNzE0OTY1NDQ5LCJleHAiOjE3MTQ5NjkwNDl9.CYRSlGG7cksao6S3l9JOnLfX1bt7VI6kIiKzJBTzGf4"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"leo@example.com\",\n    \"name\": \"Leo Leo\",\n    \"password\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Post",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNmJiMzlhMGUtMjYwMS00MmJhLWEzZmUtZGE0NjQxN2M3ZWM3IiwiaWF0IjoxNzE0OTY1NDQ5LCJleHAiOjE3MTQ5NjkwNDl9.CYRSlGG7cksao6S3l9JOnLfX1bt7VI6kIiKzJBTzGf4"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "data",
+							"value": "{\"title\":\"HGDDDDDDDD\",\"description\":\"Gccccccvbbbbbbbbbbbbbbbbbbbb\"}",
+							"contentType": "application/json",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/tmp/argocd.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/posts/2d92a0dd-d1a1-438b-ab05-1c8731e4a4f0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"posts",
+						"2d92a0dd-d1a1-438b-ab05-1c8731e4a4f0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Posts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNmJiMzlhMGUtMjYwMS00MmJhLWEzZmUtZGE0NjQxN2M3ZWM3IiwiaWF0IjoxNzE0OTY1NDQ5LCJleHAiOjE3MTQ5NjkwNDl9.CYRSlGG7cksao6S3l9JOnLfX1bt7VI6kIiKzJBTzGf4"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/posts/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"posts",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Post",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNmJiMzlhMGUtMjYwMS00MmJhLWEzZmUtZGE0NjQxN2M3ZWM3IiwiaWF0IjoxNzE0OTY1NDQ5LCJleHAiOjE3MTQ5NjkwNDl9.CYRSlGG7cksao6S3l9JOnLfX1bt7VI6kIiKzJBTzGf4"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/posts/2d92a0dd-d1a1-438b-ab05-1c8731e4a4f0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"posts",
+						"2d92a0dd-d1a1-438b-ab05-1c8731e4a4f0"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
