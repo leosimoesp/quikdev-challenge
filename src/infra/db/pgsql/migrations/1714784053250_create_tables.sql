@@ -38,5 +38,15 @@ CREATE TABLE IF NOT EXISTS post_history (
      PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS post_views (
+     post_id uuid NOT NULL,
+     total_of_visualizations bigint NOT NULL DEFAULT 0,
+     created_at timestamp NOT NULL DEFAULT NOW(),
+     updated_at timestamp NOT NULL DEFAULT NOW(),
+     PRIMARY KEY(post_id)
+);
+
+
+
 
 
