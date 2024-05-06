@@ -52,6 +52,22 @@ app.patch('/posts/:id', expressAdapter.validateTokenJWT, (req, res, next) => {
   }
 });
 
+app.post('/posts/all', expressAdapter.validateTokenJWT, (req, res, next) => {
+  try {
+    expressAdapter.create(postController.getAllPosts(req, res, next));
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get('/posts/:id', expressAdapter.validateTokenJWT, (req, res, next) => {
+  try {
+    expressAdapter.create(postController.getPost(req, res, next));
+  } catch (error) {
+    next(error);
+  }
+});
+
 const port = envLoader.getEnv('PORT');
 dbmanager.syncDB();
 app.use(ExpressErrorAdapter);
