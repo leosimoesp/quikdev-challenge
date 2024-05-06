@@ -15,7 +15,6 @@ const config = {
   idleTimeoutMillis: process.env.DATABASE_IDLE_TIMEOUTMILIS,
   timezone: process.env.DATABASE_TIMEZONE,
 };
-//const debugConsts = require('../../constants').DEBUG;
 
 function getNewPool() {
   return new Pool(config);
@@ -34,7 +33,6 @@ async function executeQuery(queryConfig) {
     }
     return false;
   } catch (e) {
-    //logger.e('db-manager', 'executeQuery', 'config.executeQuery', e, getCoi());
     await client.query('ROLLBACK');
     throw e;
   } finally {
@@ -74,12 +72,7 @@ async function createDB() {
     await client.query(sql);
     const res = await client.query('COMMIT');
     if (res) {
-      // logger.i(
-      //   'db-manager',
-      //   'createDB',
-      //   'creating initial setup config ....',
-      //   getCoi()
-      // );
+      //@TODO add custom log
     }
   } catch (e) {
     await client.query('ROLLBACK');
@@ -102,12 +95,7 @@ async function executeSQL(dir, version) {
   const res = await executeQuery(readSQL);
 
   if (res) {
-    // logger.i(
-    //   'db-manager',
-    //   'executeSQL',
-    //   `file ${version} executed with success...`,
-    //   getCoi()
-    // );
+    //@TODO add custom log
     return true;
   }
   return false;
@@ -137,32 +125,17 @@ async function syncVersions() {
       }
       if (execSql) {
         saveVersion(file, 'success');
-        // logger.i(
-        //   'db-manager',
-        //   'syncVersions',
-        //   'sql executed with success...',
-        //   getCoi()
-        // );
+        //@TODO add custom log
       }
     }
   );
 }
-
-// function showSuccessMsg() {
-//   logger.i(
-//     'db-manager',
-//     'showSuccessMsg',
-//     'enviroment is updated! ....',
-//     getCoi()
-//   );
-// }
 
 async function start() {
   const created = await createDB();
   if (created) {
     await syncVersions();
   }
-  //showSuccessMsg();
 }
 
 async function validateEnvVars() {
@@ -181,10 +154,7 @@ async function validateEnvVars() {
     );
   }
 
-  // starts db migration and sync db
-  //if (config.dbMigration === debugConsts.ON) {
   await start();
-  //}
   isDBSync = true;
 }
 
